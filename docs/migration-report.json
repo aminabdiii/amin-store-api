@@ -1,0 +1,105 @@
+{
+  "mode": "apply",
+  "repeated": false,
+  "report": {
+    "tables": {
+      "auth.users": {
+        "source": 20,
+        "imported": 20,
+        "archived": 0
+      },
+      "public.users": {
+        "source": 24,
+        "imported": 20,
+        "archived": 4
+      },
+      "public.categories": {
+        "source": 16,
+        "imported": 16,
+        "archived": 0
+      },
+      "public.products": {
+        "source": 14,
+        "imported": 14,
+        "archived": 0
+      },
+      "public.comments": {
+        "source": 18,
+        "imported": 18,
+        "archived": 0
+      },
+      "public.articles": {
+        "source": 5,
+        "imported": 5,
+        "archived": 0
+      },
+      "public.questions": {
+        "source": 7,
+        "imported": 7,
+        "archived": 0
+      },
+      "public.\"popular-brands\"": {
+        "source": 19,
+        "imported": 19,
+        "archived": 0
+      },
+      "public.features": {
+        "source": 4,
+        "imported": 4,
+        "archived": 0
+      },
+      "public.carts": {
+        "source": 29,
+        "imported": 20,
+        "archived": 9
+      },
+      "public.purchases": {
+        "source": 68,
+        "imported": 68,
+        "archived": 0
+      }
+    },
+    "assets": {
+      "entries": 201,
+      "accepted": 199,
+      "quarantined": 2,
+      "missingReferences": 1,
+      "transcoded": 16,
+      "quarantineReasons": {
+        "empty_file": 2
+      },
+      "sourceFormats": {
+        "image/png": 20,
+        "image/jpeg": 33,
+        "image/webp": 130,
+        "empty": 2,
+        "image/svg+xml": 16
+      }
+    },
+    "issues": {
+      "orphan_public_user": 4,
+      "username_normalization": 9,
+      "missing_asset_reference": 1,
+      "orphan_cart": 9,
+      "historical_missing_product": 2,
+      "orphan_order_owner": 4,
+      "historical_unresolved_variant": 5,
+      "historical_total_precision": 3
+    },
+    "identities": {
+      "invalid": 0,
+      "duplicate": 0,
+      "usernameConflicts": 2,
+      "usernameRenamed": 2,
+      "usernameNormalized": 8
+    },
+    "historicalOrderItems": 138,
+    "historicalTotalsRounded": 3,
+    "cartLines": {
+      "source": 9,
+      "imported": 9,
+      "archived": 0
+    },
+    "shadowPurchases": 0
+  }
+}

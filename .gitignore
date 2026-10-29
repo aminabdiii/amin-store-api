@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+work/
+media/
+*.log
+*.backup*
+*.zip
+.superpowers/
