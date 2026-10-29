@@ -20,7 +20,13 @@
     "db:deploy": "prisma migrate deploy",
     "db:up": "docker compose up -d --wait postgres",
     "import:legacy": "ts-node scripts/import-legacy.ts",
-    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:create": "prisma migrate dev --create-only",
+    "db:status": "prisma migrate status",
+    "db:studio": "prisma studio",
+    "db:validate": "prisma validate",
+    "db:format": "prisma format"
   },
   "dependencies": {
     "@nestjs/common": "12.3.2",
