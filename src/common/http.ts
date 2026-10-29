@@ -13,7 +13,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsInt, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Prisma } from '@prisma/client';
-import { Request, Response } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import { Observable, tap } from 'rxjs';
 import { isTransactionConflict } from './prisma-errors';
 
@@ -57,8 +57,7 @@ export class EntityIdPipe implements PipeTransform<string, number> {
     return id;
   }
 }
-export interface ApiRequest extends Request {
-  requestId: string;
+export interface ApiRequest extends FastifyRequest {
   user?: { id: string; role: 'CUSTOMER' | 'ADMIN'; sessionId: string };
 }
 
@@ -67,7 +66,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
     const http = host.switchToHttp();
     const req = http.getRequest<ApiRequest>();
-    const res = http.getResponse<Response>();
+    const res = http.getResponse<FastifyReply>();
     let status = 500;
     let code = 'INTERNAL_ERROR';
     let message: string | string[] = 'An unexpected error occurred';
@@ -99,15 +98,45 @@ export class ApiExceptionFilter implements ExceptionFilter {
         message = 'Concurrent modification; please retry';
       }
     }
+    if (
+      !(error instanceof HttpException) &&
+      !(error instanceof Prisma.PrismaClientKnownRequestError) &&
+      error &&
+      typeof error === 'object' &&
+      'statusCode' in error &&
+      typeof error.statusCode === 'number' &&
+      error.statusCode >= 400 &&
+      error.statusCode < 500
+    ) {
+      status = error.statusCode;
+      code =
+        (
+          {
+            400: 'INVALID_REQUEST',
+            413: 'REQUEST_TOO_LARGE',
+            415: 'UNSUPPORTED_MEDIA_TYPE',
+            429: 'RATE_LIMITED',
+          } as Record<number, string>
+        )[status] ?? `HTTP_${status}`;
+      message =
+        (
+          {
+            400: 'Invalid request body',
+            413: 'Request exceeds the permitted size or multipart limits',
+            415: 'Unsupported content type',
+            429: 'Too many requests; try again later',
+          } as Record<number, string>
+        )[status] ?? 'Request rejected';
+    }
     if (status === 500)
       console.error(
         JSON.stringify({
           event: 'request_error',
-          requestId: req.requestId,
+          requestId: req.id,
           errorType: error instanceof Error ? error.name : 'Unknown',
         }),
       );
-    res.status(status).json({ statusCode: status, code, message, requestId: req.requestId });
+    res.code(status).send({ statusCode: status, code, message, requestId: req.id });
   }
 }
 @Injectable()
@@ -121,9 +150,9 @@ export class RequestLogger implements NestInterceptor {
           console.info(
             JSON.stringify({
               event: 'request',
-              requestId: req.requestId,
+              requestId: req.id,
               method: req.method,
-              route: req.route?.path ?? 'unknown',
+              route: req.routeOptions?.url ?? 'unknown',
               durationMs: Date.now() - started,
             }),
           ),

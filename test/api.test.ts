@@ -4,12 +4,13 @@ import assert from 'node:assert/strict';
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-import { createApp } from '../src/app';
-import { Database } from '../src/common/database';
+import { createApp } from '../src/bootstrap';
+import { Database } from '../src/common/database.service';
 import { hashSync } from 'bcryptjs';
 import sharp from 'sharp';
 import { AuthService } from '../src/auth/auth.service';
-import { mkdir, mkdtemp, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile, unlink } from 'node:fs/promises';
+import { join, dirname } from 'node:path';
 
 let app: INestApplication;
 let db: Database;
@@ -35,7 +36,30 @@ before(async () => {
   process.env.MEDIA_DIR = testMediaDir;
   app = await createApp();
   await app.init();
+  if (app.getHttpAdapter().getType() === 'fastify')
+    await app.getHttpAdapter().getInstance().ready();
   db = app.get(Database);
+});
+test('Fastify serves the existing HTTP contract with CORS and normalized parser errors', async () => {
+  assert.equal(app.getHttpAdapter().getType(), 'fastify');
+  const preflight = await request(app.getHttpServer())
+    .options('/api/v1/users/me')
+    .set('Origin', 'http://localhost:5173')
+    .set('Access-Control-Request-Method', 'PATCH')
+    .expect(204);
+  assert.ok(preflight.headers['access-control-allow-methods'].includes('PATCH'));
+  const invalid = await request(app.getHttpServer())
+    .post('/api/v1/auth/login')
+    .set('Content-Type', 'application/json')
+    .send('{invalid')
+    .expect(400);
+  assert.equal(invalid.body.requestId, invalid.headers['x-request-id']);
+  const large = await request(app.getHttpServer())
+    .post('/api/v1/auth/login')
+    .set('Content-Type', 'application/json')
+    .send(JSON.stringify({ value: 'a'.repeat(1024 * 1024) }))
+    .expect(413);
+  assert.equal(large.body.requestId, large.headers['x-request-id']);
 });
 after(async () => {
   if (app) await app.close();
@@ -383,6 +407,7 @@ test('valid avatar uploads become immutable local WebP and cannot change another
     .get(new URL(uploaded.body.url).pathname)
     .expect(200);
   assert.equal(media.headers['content-type'], 'image/webp');
+  assert.equal(media.headers['x-content-type-options'], 'nosniff');
   assert.equal(media.body.subarray(0, 4).toString(), 'RIFF');
 });
 test('the last active administrator cannot be disabled or demoted', async () => {
@@ -525,4 +550,77 @@ test('OpenAPI documents canonical responses, decimal money and public authentica
   assert.equal(invalid.body.requestId, invalid.headers['x-request-id']);
   const health = await request(app.getHttpServer()).get('/api/v1/health').expect(200);
   assert.equal(health.body.database, 'connected');
+});
+test('Fastify multipart limits reject extra files, fields and oversized uploads before persistence', async () => {
+  const png = await sharp({ create: { width: 2, height: 2, channels: 3, background: '#000000' } })
+    .png()
+    .toBuffer();
+  const before = await db.media.count();
+  await request(app.getHttpServer())
+    .post('/api/v1/media/avatar')
+    .set(auth(buyer))
+    .attach('file', png, { filename: 'one.png', contentType: 'image/png' })
+    .attach('file', png, { filename: 'two.png', contentType: 'image/png' })
+    .expect(413);
+  await request(app.getHttpServer())
+    .post('/api/v1/media/avatar')
+    .set(auth(buyer))
+    .field('userId', randomUUID())
+    .attach('file', png, { filename: 'one.png', contentType: 'image/png' })
+    .expect(413);
+  const large = await request(app.getHttpServer())
+    .post('/api/v1/media/avatar')
+    .set(auth(buyer))
+    .attach('file', Buffer.alloc(5 * 1024 * 1024 + 1), {
+      filename: 'large.png',
+      contentType: 'image/png',
+    })
+    .expect(413);
+  assert.equal(large.body.requestId, large.headers['x-request-id']);
+  await request(app.getHttpServer())
+    .post('/api/v1/media/avatar')
+    .set(auth(buyer))
+    .send({})
+    .expect(400);
+  assert.equal(await db.media.count(), before);
+});
+test('Fastify serves Swagger assets and denies hidden files and traversal outside media root', async () => {
+  await request(app.getHttpServer()).get('/docs').expect(200);
+  await request(app.getHttpServer()).get('/docs/swagger-ui-init.js').expect(200);
+  await request(app.getHttpServer()).get('/docs/swagger-ui.css').expect(200);
+  const name = `${randomUUID()}.txt`;
+  const sentinel = 'private-file-must-not-be-served';
+  await writeFile(join(testMediaDir, '.hidden'), sentinel);
+  await writeFile(join(dirname(testMediaDir), name), sentinel);
+  try {
+    for (const path of ['/media/.hidden', `/media/%2e%2e%2f${name}`]) {
+      const response = await request(app.getHttpServer()).get(path);
+      assert.ok([400, 403, 404].includes(response.status));
+      assert.ok(!response.text.includes(sentinel));
+    }
+  } finally {
+    await unlink(join(dirname(testMediaDir), name));
+  }
+});
+test('Fastify auth rate limiting returns the canonical error without blocking other API routes', async () => {
+  let response;
+  for (let i = 0; i < 41; i++) {
+    response = await request(app.getHttpServer())
+      .post('/api/v1/auth/login')
+      .set('Origin', 'http://localhost:5173')
+      .send({});
+    if (response.status === 429) break;
+    assert.equal(response.status, 400);
+  }
+  assert.equal(response!.status, 429);
+  assert.equal(response!.body.code, 'RATE_LIMITED');
+  assert.equal(response!.body.requestId, response!.headers['x-request-id']);
+  assert.equal(response!.headers['access-control-allow-origin'], 'http://localhost:5173');
+  assert.ok(Number(response!.headers['retry-after']) > 0);
+  await request(app.getHttpServer())
+    .options('/api/v1/auth/login')
+    .set('Origin', 'http://localhost:5173')
+    .set('Access-Control-Request-Method', 'POST')
+    .expect(204);
+  await request(app.getHttpServer()).get('/api/v1/health').expect(200);
 });

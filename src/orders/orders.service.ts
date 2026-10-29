@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OrderStatus, Prisma } from '@prisma/client';
-import { Database } from '../common/database';
+import { Database } from '../common/database.service';
 import { fail, PageQuery, pageResult, skip } from '../common/http';
 import { lockCart, cartInclude } from '../cart/cart.service';
 import { lineTotal, netPrice } from '../common/money';

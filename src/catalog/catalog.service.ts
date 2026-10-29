@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import sanitize from 'sanitize-html';
-import { Database } from '../common/database';
+import { Database } from '../common/database.service';
 import { fail, PageQuery, pageResult, skip } from '../common/http';
 import { mediaUrl, presentProduct, productInclude } from '../common/presenters';
 import { combinations, OptionInput, signature } from '../common/variants';

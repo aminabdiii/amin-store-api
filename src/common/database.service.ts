@@ -1,4 +1,4 @@
-import { Global, Injectable, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { configuration } from './config';
@@ -37,6 +37,3 @@ export class Database extends PrismaClient implements OnModuleInit, OnModuleDest
     }
   }
 }
-@Global()
-@Module({ providers: [Database], exports: [Database] })
-export class DatabaseModule {}

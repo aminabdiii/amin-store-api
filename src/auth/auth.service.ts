@@ -3,7 +3,7 @@ import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { hash, verify } from 'argon2';
 import { compare } from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Database } from '../common/database';
+import { Database } from '../common/database.service';
 import { configuration } from '../common/config';
 import { fail } from '../common/http';
 import { presentUser, userSelect } from '../common/presenters';

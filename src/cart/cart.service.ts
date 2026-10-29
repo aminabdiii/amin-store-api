@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { Database } from '../common/database';
+import { Database } from '../common/database.service';
 import { fail } from '../common/http';
 import { mediaUrl } from '../common/presenters';
 import { lineTotal, netPrice } from '../common/money';

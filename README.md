@@ -1,6 +1,14 @@
 # Amin Store API
 
-Local REST backend built with NestJS 12.3.2, Prisma 7.10.1, PostgreSQL 18.6 and Node.js 24. The existing frontend is a requirements reference and has not been modified.
+Local REST backend built with NestJS 12.3.2, Fastify 5.12.7, Prisma 7.10.1, PostgreSQL 18.6 and Node.js 24. The existing frontend is a requirements reference and has not been modified.
+
+## Application structure
+
+`src/main.ts` starts the application. `src/bootstrap.ts` configures the Fastify adapter, native plugins, validation and Swagger. The root `app.module.ts`, `app.controller.ts` and `app.service.ts` define dependency wiring and the health endpoint.
+
+Each feature has its own `*.module.ts`, `*.controller.ts`, `*.service.ts` and DTOs. Administrator controllers are separate `admin-*.controller.ts` files. Database lifecycle and module wiring are separate in `common/database.service.ts` and `common/database.module.ts`.
+
+Class, method and property decorators each occupy their own line, with the declaration below them. ESLint enforces this convention; `pnpm format` applies layout fixes before Prettier.
 
 ## Run locally
 
@@ -48,6 +56,8 @@ Routes are under `/api/v1`. Lists return `{ "data": [], "meta": { "page": 1, "li
 Use `cart`, `cartItems`, `quantity`, `options`, `shippingLeadDays`, `rating` and `orders`. [Frontend service mapping](docs/frontend-api-mapping.md) documents the migration from direct Supabase usage. This API is not a Supabase protocol emulator; the existing frontend requires a separate integration change.
 
 Images accept authenticated multipart uploads up to 5 MB: `/media/avatar` for the current user's avatar, `/media/images` for administrators. PNG/JPEG/WebP signatures and pixel bounds are checked, metadata is stripped, and output is encoded as immutable WebP. Store returned asset IDs in catalog/content requests; do not construct storage URLs.
+
+Fastify handles multipart uploads, security headers, static media and rate limits with native plugins. Uploads accept exactly one `file` part and no additional fields. JSON bodies are limited to 1 MB. Per-IP request limits are 500 API requests, 40 authentication requests and 100 product-view increments per minute; request-limit errors use the standard API error body and `Retry-After` header.
 
 ## Verify
 

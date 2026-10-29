@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import sanitize from 'sanitize-html';
-import { Database } from '../common/database';
+import { Database } from '../common/database.service';
 import { fail, PageQuery, pageResult, skip } from '../common/http';
 import { mediaUrl } from '../common/presenters';
 import { configuration } from '../common/config';

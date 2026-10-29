@@ -1,4 +1,4 @@
-import { createApp } from './app';
+import { createApp } from './bootstrap';
 import { configuration } from './common/config';
 async function main() {
   const app = await createApp();

@@ -32,13 +32,20 @@ export class OptionDto {
   values!: string[];
 }
 export class CreateProductDto {
-  @ApiProperty() @IsString() @Length(1, 250) @Matches(/\S/) title!: string;
+  @ApiProperty()
+  @IsString()
+  @Length(1, 250)
+  @Matches(/\S/)
+  title!: string;
   @ApiPropertyOptional()
   @ValidateIf((_o, value: unknown) => value !== undefined)
   @IsString()
   @Length(0, 50000)
   description?: string;
-  @ApiProperty() @IsInt() @Min(1) categoryId!: number;
+  @ApiProperty()
+  @IsInt()
+  @Min(1)
+  categoryId!: number;
   @ApiProperty({ example: '19.99', type: String })
   @IsString()
   @Matches(/^(0|[1-9]\d{0,17})(\.\d{1,2})?$/)
@@ -82,8 +89,16 @@ export class UpdateProductDto extends PartialType(CreateProductDto, {
   skipNullProperties: false,
 }) {}
 export class CategoryDto {
-  @ApiProperty() @IsString() @Length(1, 200) @Matches(/\S/) title!: string;
-  @ApiProperty() @IsString() @Length(1, 200) @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) slug!: string;
+  @ApiProperty()
+  @IsString()
+  @Length(1, 200)
+  @Matches(/\S/)
+  title!: string;
+  @ApiProperty()
+  @IsString()
+  @Length(1, 200)
+  @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+  slug!: string;
   @ApiPropertyOptional()
   @ValidateIf((_o, value: unknown) => value !== undefined)
   @IsUUID()
@@ -142,5 +157,8 @@ export class InventoryDto {
   @Min(-1000000)
   @Max(1000000)
   delta!: number;
-  @ApiProperty() @IsString() @Length(3, 500) reason!: string;
+  @ApiProperty()
+  @IsString()
+  @Length(3, 500)
+  reason!: string;
 }

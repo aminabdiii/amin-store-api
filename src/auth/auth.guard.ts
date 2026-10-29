@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Database } from '../common/database';
+import { Database } from '../common/database.service';
 import { ApiRequest, fail } from '../common/http';
 import { configuration } from '../common/config';
 export const Public = () => SetMetadata('public', true);
