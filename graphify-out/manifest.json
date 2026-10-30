@@ -460,5 +460,11 @@
     "seen": 1793369642.2248938,
     "ast_hash": "8a4c96655dbc915739cd89bc837b7d3c",
     "semantic_hash": ""
+  },
+  "scripts/copy-local-to-neon.mjs": {
+    "mtime": 1793370238.2100477,
+    "seen": 1793370240.127497,
+    "ast_hash": "69efd386573ca34de5728c47d54187d5",
+    "semantic_hash": ""
   }
 }
