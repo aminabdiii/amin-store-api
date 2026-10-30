@@ -5,10 +5,7 @@
   "buildCommand": "pnpm db:generate && pnpm build:vercel && pnpm db:deploy",
   "functions": {
     "api/index.mjs": {
-      "includeFiles": [
-        "dist-vercel/**",
-        "node_modules/.pnpm/swagger-ui-dist@*/node_modules/swagger-ui-dist/**"
-      ]
+      "includeFiles": "{dist-vercel/**,node_modules/.pnpm/swagger-ui-dist@*/node_modules/swagger-ui-dist/**}"
     }
   },
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }]

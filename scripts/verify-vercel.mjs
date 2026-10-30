@@ -1,4 +1,5 @@
 import { nodeFileTrace } from '@vercel/nft';
+import assert from 'node:assert/strict';
 import { cp, glob, lstat, mkdir, mkdtemp, readFile, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -10,9 +11,19 @@ const temporary = await mkdtemp(join(tmpdir(), 'amin-store-function-'));
 try {
   const { fileList } = await nodeFileTrace(['api/index.mjs'], { base: root });
   const config = JSON.parse(await readFile('vercel.json', 'utf8'));
-  for await (const file of glob(config.functions['api/index.mjs'].includeFiles)) {
+  const includeFiles = config.functions['api/index.mjs'].includeFiles;
+  assert.equal(typeof includeFiles, 'string', 'Vercel functions.includeFiles must be a string');
+  assert.ok(includeFiles.length <= 256, 'Vercel includeFiles exceeds schema maxLength');
+  const included = [];
+  for await (const file of glob(includeFiles)) {
+    included.push(file);
     if ((await lstat(file)).isFile()) fileList.add(file);
   }
+  assert.ok(included.includes('dist-vercel/bootstrap.mjs'), 'Missing application bundle');
+  assert.ok(
+    included.some((file) => file.endsWith('/swagger-ui.css')),
+    'Missing Swagger assets',
+  );
   // Copy only files discovered by the same tracer used by Vercel, not local node_modules.
   for (const file of fileList) {
     const source = resolve(root, file);
