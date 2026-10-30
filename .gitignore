@@ -7,3 +7,4 @@ work/
 *.backup*
 *.zip
 .superpowers/
+dist-vercel/

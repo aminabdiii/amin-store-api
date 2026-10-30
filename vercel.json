@@ -2,10 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "outputDirectory": "public",
-  "buildCommand": "pnpm db:generate && pnpm build && pnpm db:deploy",
+  "buildCommand": "pnpm db:generate && pnpm build:vercel && pnpm db:deploy",
   "functions": {
-    "api/index.js": {
-      "includeFiles": "dist/**"
+    "api/index.mjs": {
+      "includeFiles": "dist-vercel/**"
     }
   },
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }]

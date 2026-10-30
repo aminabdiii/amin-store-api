@@ -1,4 +1,5 @@
-const { createApp } = require('../dist/src/bootstrap');
+import bootstrap from '../dist-vercel/bootstrap.mjs';
+const { createApp } = bootstrap;
 
 let application;
 function getApplication() {
@@ -16,7 +17,7 @@ function getApplication() {
   return application;
 }
 
-module.exports = async function handler(request, response) {
+export default async function handler(request, response) {
   const app = await getApplication();
   app.getHttpAdapter().getInstance().server.emit('request', request, response);
 };

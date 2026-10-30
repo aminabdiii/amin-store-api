@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "ts-node src/main.ts",
     "build": "pnpm clean && tsc -p tsconfig.json",
+    "build:vercel": "pnpm build && node scripts/prepare-vercel.mjs",
     "start": "node dist/src/main.js",
     "typecheck": "tsc --noEmit",
     "format": "eslint src --fix --fix-type layout && prettier --write .",
@@ -29,29 +30,30 @@
     "db:format": "prisma format"
   },
   "dependencies": {
+    "@fastify/helmet": "13.2.0",
+    "@fastify/multipart": "10.1.6",
+    "@fastify/rate-limit": "11.2.1",
+    "@fastify/static": "10.1.8",
     "@nestjs/common": "12.3.2",
     "@nestjs/core": "12.3.2",
+    "@nestjs/platform-fastify": "12.3.2",
     "@nestjs/swagger": "^12.0.0",
-    "@prisma/client": "7.10.1",
     "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
     "argon2": "^0.44.0",
     "bcryptjs": "^3.0.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^17.2.3",
+    "fastify": "5.12.7",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "sanitize-html": "^2.17.0",
     "sharp": "^0.34.4",
-    "yauzl": "^3.2.0",
-    "@nestjs/platform-fastify": "12.3.2",
-    "fastify": "5.12.7",
-    "@fastify/helmet": "13.2.0",
-    "@fastify/static": "10.1.8",
-    "@fastify/multipart": "10.1.6",
-    "@fastify/rate-limit": "11.2.1"
+    "swagger-ui-dist": "5.34.0",
+    "yauzl": "^3.2.0"
   },
   "devDependencies": {
     "@nestjs/testing": "12.3.2",
@@ -61,12 +63,13 @@
     "@types/sanitize-html": "^2.16.0",
     "@types/supertest": "^6.0.3",
     "@types/yauzl": "^2.10.3",
+    "esbuild": "^0.28.2",
     "eslint": "^9.39.0",
-    "typescript-eslint": "^8.46.3",
-    "prisma": "7.10.1",
     "prettier": "^3.6.2",
+    "prisma": "7.10.1",
     "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3"
   }
 }
