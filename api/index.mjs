@@ -1,3 +1,5 @@
+// Swagger resolves this package dynamically; expose it to Vercel's file tracer.
+import 'swagger-ui-dist/absolute-path.js';
 import bootstrap from '../dist-vercel/bootstrap.mjs';
 const { createApp } = bootstrap;
 
@@ -20,4 +22,4 @@ function getApplication() {
 export default async function handler(request, response) {
   const app = await getApplication();
   app.getHttpAdapter().getInstance().server.emit('request', request, response);
-};
+}
