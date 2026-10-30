@@ -24,9 +24,9 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1793368735.7575247,
-    "seen": 1793368770.6800017,
-    "ast_hash": "043d7b4fd72dc60e422d8a0431b844ff",
+    "mtime": 1793369213.015124,
+    "seen": 1793369253.3995006,
+    "ast_hash": "126399e858cd8ed6c28fe1dd8d8be097",
     "semantic_hash": ""
   },
   "prisma.config.ts": {
@@ -438,21 +438,27 @@
     "semantic_hash": ""
   },
   "vercel.json": {
-    "mtime": 1793368601.118827,
-    "seen": 1793368770.6800754,
-    "ast_hash": "18f3f7d871526b913813fcda192b74fc",
+    "mtime": 1793369187.6790392,
+    "seen": 1793369253.3995836,
+    "ast_hash": "4f48f14dbe8a2d2561f70fa6d48531b9",
     "semantic_hash": ""
   },
   "api/index.mjs": {
-    "mtime": 1793368696.132767,
-    "seen": 1793368770.6799908,
-    "ast_hash": "7dc0ee0446c5a52a79c52ea19d08eda3",
+    "mtime": 1793369251.2378683,
+    "seen": 1793369253.3994882,
+    "ast_hash": "0d81201af62e6e0d659cfbe72be42488",
     "semantic_hash": ""
   },
   "scripts/prepare-vercel.mjs": {
-    "mtime": 1793368696.1326783,
-    "seen": 1793368770.680011,
-    "ast_hash": "391643426be960fcd925e9f5ee6a5a3a",
+    "mtime": 1793369251.255252,
+    "seen": 1793369253.399511,
+    "ast_hash": "242bd885c0c822f648af41df7cdd7ac9",
+    "semantic_hash": ""
+  },
+  "scripts/verify-vercel.mjs": {
+    "mtime": 1793369390.4887178,
+    "seen": 1793369437.7812297,
+    "ast_hash": "7e45892564035970478aa767c8de9aab",
     "semantic_hash": ""
   }
 }
