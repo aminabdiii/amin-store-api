@@ -1,6 +1,16 @@
 import { build } from 'esbuild';
 
-const runtimePackages = new Set(['@prisma/client', '@prisma/adapter-pg', 'pg', 'argon2', 'sharp']);
+const runtimePackages = new Set([
+  '@prisma/client',
+  '@prisma/adapter-pg',
+  'pg',
+  'argon2',
+  'sharp',
+  // Mapped DTO types load these through createRequire(import.meta.url). Keep
+  // them traceable at runtime so PartialType inherits its validation metadata.
+  'class-validator',
+  'class-transformer',
+]);
 
 // Compile with tsc first: Nest dependency injection needs emitted decorator metadata.
 // Bundle JS dependencies so CommonJS packages never require external ESM packages.
