@@ -438,9 +438,9 @@
     "semantic_hash": ""
   },
   "vercel.json": {
-    "mtime": 1793369187.6790392,
-    "seen": 1793369253.3995836,
-    "ast_hash": "4f48f14dbe8a2d2561f70fa6d48531b9",
+    "mtime": 1793369623.7784986,
+    "seen": 1793369642.2249336,
+    "ast_hash": "f3d24387dbdcffc8bff13a504814f295",
     "semantic_hash": ""
   },
   "api/index.mjs": {
@@ -456,9 +456,9 @@
     "semantic_hash": ""
   },
   "scripts/verify-vercel.mjs": {
-    "mtime": 1793369390.4887178,
-    "seen": 1793369437.7812297,
-    "ast_hash": "7e45892564035970478aa767c8de9aab",
+    "mtime": 1793369624.9105024,
+    "seen": 1793369642.2248938,
+    "ast_hash": "8a4c96655dbc915739cd89bc837b7d3c",
     "semantic_hash": ""
   }
 }

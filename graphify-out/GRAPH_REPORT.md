@@ -1,17 +1,17 @@
 # Graph Report - amin-store-api  (2026-10-30)
 
 ## Corpus Check
-- 75 files · ~24,104 words
+- 75 files · ~24,143 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 6 file(s) not represented in the graph (top: (none) 3, .example 1, .toml 1)
 
 ## Summary
-- 798 nodes · 1885 edges · 29 communities (24 shown, 5 thin omitted)
+- 798 nodes · 1886 edges · 29 communities (24 shown, 5 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 88 edges (avg confidence: 0.81)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c9ae1dd1`
+- Built from commit: `85ed44cf`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -192,4 +192,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `migration.sql` be split into smaller, more focused modules?**
   _Cohesion score 0.0579476861167002 - nodes in this community are weakly interconnected._
 - **Should `core.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.0733099209833187 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07374890254609306 - nodes in this community are weakly interconnected._

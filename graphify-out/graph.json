@@ -7104,7 +7104,7 @@
       "file_type": "code",
       "norm_label": "root",
       "source_file": "scripts/verify-vercel.mjs",
-      "source_location": "L8"
+      "source_location": "L9"
     },
     {
       "id": "test_import_integration_test",
@@ -8096,7 +8096,7 @@
       "file_type": "code",
       "norm_label": "rewrites",
       "source_file": "vercel.json",
-      "source_location": "L14"
+      "source_location": "L11"
     },
     {
       "id": "vercel_schema",
@@ -19372,7 +19372,7 @@
     },
     {
       "source": "scripts_verify_vercel",
-      "target": "ref_node_fs",
+      "target": "ref_node_assert",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19384,7 +19384,7 @@
     },
     {
       "source": "scripts_verify_vercel",
-      "target": "ref_node_os",
+      "target": "ref_node_fs",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19396,7 +19396,7 @@
     },
     {
       "source": "scripts_verify_vercel",
-      "target": "ref_node_path",
+      "target": "ref_node_os",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19408,7 +19408,7 @@
     },
     {
       "source": "scripts_verify_vercel",
-      "target": "ref_node_child_process",
+      "target": "ref_node_path",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19420,7 +19420,7 @@
     },
     {
       "source": "scripts_verify_vercel",
-      "target": "ref_dotenv",
+      "target": "ref_node_child_process",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19428,6 +19428,18 @@
       "context": "import",
       "source_file": "scripts/verify-vercel.mjs",
       "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_verify_vercel",
+      "target": "ref_dotenv",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "scripts/verify-vercel.mjs",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -26185,7 +26197,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/verify-vercel.mjs",
-      "source_location": "L8",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -27571,7 +27583,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "vercel.json",
-      "source_location": "L14",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -31232,5 +31244,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c9ae1dd134f4d2d45e422052a9d4e453d7c9c53c"
+  "built_at_commit": "85ed44cf44cf5ce5775e5358d87eee841ff8bd87"
 }
